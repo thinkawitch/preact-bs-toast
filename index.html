@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Preact Bootstrap Toast example</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-md mt-3">
+    <h2>Preact Bootstrap Toast example</h2>
+    <p>
+        How to use bootstrap with preact simultaneously.
+        Preact, HTM and bootstrap js just right here.
+    </p>
+    <div class="container-fluid bg-light p-3" id="demo-app">
+        <div class="d-flex flex-row align-items-center justify-content-center">
+            <div class="d-flex align-items-center text-secondary">
+                <span>Loading...</span>
+                <div class="spinner-border ms-2" role="status" aria-hidden="true"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-md mt-3">
+    <a href="https://github.com/thinkawitch/preact-bs-toast">github thinkawitch/preact-bs-toast</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script type="module">
+    import { render, html } from './src/imports.js';
+    import { ToastContextProvider } from './src/toast-context.js';
+    import { ToastHolder } from './src/toast-component.js';
+    import { useToast } from './src/toast-hook.js';
+
+    function App() {
+        return html`
+            <${ToastContextProvider}>
+                <div class="card">
+                    <${DemoComponent} />
+                </div>
+                <${ToastHolder} position="top-right" />
+            <//>
+        `;
+    }
+
+    function DemoComponent() {
+        const { addToast, removeToast, toastId } = useToast();
+
+        const toast1 = () => {
+            addToast({ message: 'How are you?' });
+        }
+        const toast2 = () => {
+            addToast({ icon: 'bi-sun', title: 'Always sunny', message: "It's always sunny in California", type: 'warning', delay: 10000 });
+        }
+        const toast3 = () => {
+            addToast({ icon: 'bi-telephone-fill', title: 'Missed call', titleNotice: '9 mins ago', message: 'You missed the call from Mr. A. Jr. Brown', type: 'danger', delay: 20000 });
+        }
+        const toast4 = () => {
+            addToast({ message: "Task completed", type: 'success', delay: 3000 });
+        }
+
+        return html`
+            <div class="card-body">
+                <p>
+                    Use buttons to make some toasts.
+                </p>
+                <div class="flex flex-wrap" style="margin: -0.5rem 0 0 -0.5rem">
+                    <button class="btn btn-secondary ms-2 mt-2" onClick=${toast1}>toast 1</button>
+                    <button class="btn btn-warning ms-2 mt-2" onClick=${toast2}>toast 2</button>
+                    <button class="btn btn-danger ms-2 mt-2" onClick=${toast3}>toast 3</button>
+                    <button class="btn btn-success ms-2 mt-2" onClick=${toast4}>toast 4</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // render the app
+    render(App(), document.getElementById('demo-app'));
+</script>
+</body>
+</html>
